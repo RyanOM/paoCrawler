@@ -29,23 +29,28 @@ def main():
 
         # Get page's html and find all product boxes
         page_html = browser.page_source
-        soup = BeautifulSoup(page_html, "lxml")
+        soup = BeautifulSoup(page_html)
         product_list = soup.find_all("div", class_="boxProduct")
 
         for product in product_list:
 
             # Get product description
             product_name = product.find("h3", class_="showcase-item__name")
+            product_name = clean_text(product_name.text)
 
             """
-            product_price = product.find_all("p", class_="singleValue")  => returns a list of all the prices in html of each product box.
-            Since there are sometimes 2 prices due to promotions, we should always get the last element of this list 
+            prices = product.find_all("p", class_="singleValue")  => returns a list of all the prices in html of each product box.
+            Since there are sometimes 2 prices due to promotions, we should always get the last element of this list if avaliable.
             that represents the final price.
             """
-            product_price = product.find_all("p", class_="singleValue")[-1]
+            prices = product.find_all("p", class_="singleValue")
+            if len(prices):
+                product_price = clean_text(prices[-1].text)
+            else:
+                product_price = "No price available on website."
 
-            print(clean_text(product_name.text))
-            print(clean_text(product_price.text))
+            print(product_name)
+            print(product_price)
             print("")
 
 
