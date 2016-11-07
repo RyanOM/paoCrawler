@@ -29,3 +29,8 @@ Run the crawler:
 ```
 python main.py
 ```
+
+You could also add the result to a text file:
+```
+python main.py > results.txt
+```
